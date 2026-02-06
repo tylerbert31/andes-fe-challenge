@@ -1,8 +1,8 @@
-import axios from "axios";
+// import axios from "axios";
 
 class query {
-  private get = axios.get;
-  private rootUrl: string = "";
+  // private get = axios.get;
+  // private rootUrl: string = "";
 
   constructor() {}
 }
