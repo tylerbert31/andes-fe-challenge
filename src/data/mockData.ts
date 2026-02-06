@@ -1,10 +1,12 @@
-import type { Category, Game, ProvidersData } from "../types";
+import type { Category, Game } from "../types";
 
 export const CATEGORIES_DATA: Category[] = [
   {
     id: "search",
     category: "BUSCAR",
+    providers: {},
     count: 0,
+    article: null,
   },
   {
     id: "15665",
@@ -15,6 +17,7 @@ export const CATEGORIES_DATA: Category[] = [
     icon_light: "https://f1m9.blob.core.windows.net/f1m9/icons/home_light.webp",
     providers: { Skywind: 248, PragmaticPlay: 666, PGSoft: 168 },
     count: 8926,
+    article: "0",
   },
   {
     id: "15648",
@@ -26,6 +29,7 @@ export const CATEGORIES_DATA: Category[] = [
       "https://f1m9.blob.core.windows.net/f1m9/icons/popular_light.webp",
     providers: { PragmaticPlay: 19, JiLi: 3, Skywind: 9 },
     count: 41,
+    article: "0",
   },
   {
     id: "15647",
@@ -35,7 +39,9 @@ export const CATEGORIES_DATA: Category[] = [
     icon_off: "https://f1m9.blob.core.windows.net/f1m9/icons/jackpot_off.webp",
     icon_light:
       "https://f1m9.blob.core.windows.net/f1m9/icons/jackpot_light.webp",
+    providers: {},
     count: 7433,
+    article: "0",
   },
   {
     id: "15649",
@@ -44,7 +50,9 @@ export const CATEGORIES_DATA: Category[] = [
       "https://f1m9.blob.core.windows.net/f1m9/icons/new_active.webp",
     icon_off: "https://f1m9.blob.core.windows.net/f1m9/icons/new_off.webp",
     icon_light: "https://f1m9.blob.core.windows.net/f1m9/icons/new_light.webp",
+    providers: {},
     count: 142,
+    article: "0",
   },
   {
     id: "15650",
@@ -54,21 +62,23 @@ export const CATEGORIES_DATA: Category[] = [
     icon_off: "https://f1m9.blob.core.windows.net/f1m9/icons/casual_off.webp",
     icon_light:
       "https://f1m9.blob.core.windows.net/f1m9/icons/casual_light.webp",
+    providers: {},
     count: 55,
+    article: "0",
   },
 ];
 
-export const PROVIDERS_DATA: ProvidersData = {
-  BGaming: 187,
-  PragmaticPlay: 591,
-  Skywind: 199,
-  PGSoft: 183,
-  WazDan: 268,
-  Hacksaw: 93,
-  Zitro: 60,
-  JiLi: 197,
-  Playtech: 373,
-  Endorphina: 170,
+export const PROVIDERS_DATA: Record<string, any> = {
+  BGaming: { count: 187, iconDark: "", iconLight: "", article: null },
+  PragmaticPlay: { count: 591, iconDark: "", iconLight: "", article: null },
+  Skywind: { count: 199, iconDark: "", iconLight: "", article: null },
+  PGSoft: { count: 183, iconDark: "", iconLight: "", article: null },
+  WazDan: { count: 268, iconDark: "", iconLight: "", article: null },
+  Hacksaw: { count: 93, iconDark: "", iconLight: "", article: null },
+  Zitro: { count: 60, iconDark: "", iconLight: "", article: null },
+  JiLi: { count: 197, iconDark: "", iconLight: "", article: null },
+  Playtech: { count: 373, iconDark: "", iconLight: "", article: null },
+  Endorphina: { count: 170, iconDark: "", iconLight: "", article: null },
 };
 
 export const GAMES_DATA: Game[] = [

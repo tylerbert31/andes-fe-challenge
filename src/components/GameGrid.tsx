@@ -19,7 +19,7 @@ export const GameGrid = ({ games }: GameGridProps) => {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-3 gap-3 px-3">
+      <div className="grid grid-cols-3 md:grid-cols-4 gap-3 px-5">
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <SkeletonBox key={i} className="aspect-square rounded-xl" />
         ))}
@@ -37,8 +37,8 @@ export const GameGrid = ({ games }: GameGridProps) => {
   }
 
   return (
-    <section className="px-3">
-      <div className="grid grid-cols-3 gap-3">
+    <section className="px-5">
+      <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
         {games.map((game) => (
           <GameCard key={game.id} game={game} />
         ))}
