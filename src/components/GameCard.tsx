@@ -1,12 +1,19 @@
 import { useGame } from "../context/GameContext";
 import type { Game } from "../types";
+import { motion } from "framer-motion";
 
 export const GameCard = ({ game }: { game: Game }) => {
   const { isFavorite, toggleFavorite } = useGame();
   const active = isFavorite(game.id);
 
   return (
-    <div className="relative group cursor-pointer">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="relative group cursor-pointer"
+    >
       <div className="relative aspect-square rounded-xl overflow-hidden shadow-sm bg-gray-200">
         <img
           src={game.imgURL}
@@ -75,6 +82,6 @@ export const GameCard = ({ game }: { game: Game }) => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
