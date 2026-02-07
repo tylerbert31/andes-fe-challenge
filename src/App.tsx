@@ -3,24 +3,39 @@ import "./App.css";
 
 // Components
 import { Header } from "./components/Header";
-import { GameProviders } from "./components/GameProviders";
+import { GameProviders, GameProvidersLoader } from "./components/GameProviders";
 import { Categories } from "./components/Categories";
 import { SearchBar } from "./components/SearchBar";
-import { GameGrid } from "./components/GameGrid";
+import { GameGrid, GamesGridLoader } from "./components/GameGrid";
 
 // Data & Types
-import { GAMES_DATA } from "./data/mockData";
 import Query from "./lib/query";
 
-function App() {
-  const [activeCategory, setActiveCategory] = useState<string>("15665");
-  const [provider, setProvider] = useState<string>("");
+import { GameProvider, useGame } from "./context/GameContext";
+
+function AppContent() {
+  const { activeCategory, setActiveCategory, provider, setProvider } =
+    useGame();
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const { data: listData } = Query.getList();
+  // Get Categories and Providers
+  const { data: listData, isLoading: isLoadingList } = Query.getList();
+  const {
+    data: gamesInfiniteData,
+    isLoading: isLoadingGames,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = Query.getGames({
+    category: activeCategory,
+    provider,
+  });
+
+  const gamesData = gamesInfiniteData?.pages.flat() || [];
 
   const handleCategoryClick = (id: string) => {
     setActiveCategory(id);
+    setProvider(""); // Reset provider when changing category
     if (id !== "search") {
       setSearchQuery("");
     }
@@ -31,7 +46,11 @@ function App() {
       <Header />
 
       <main className="space-y-6 pt-4">
-        <GameProviders data={listData?.providers || {}} />
+        {isLoadingList ? (
+          <GameProvidersLoader />
+        ) : (
+          <GameProviders data={listData?.providers || {}} />
+        )}
 
         <Categories
           activeCategory={activeCategory}
@@ -44,9 +63,26 @@ function App() {
           visible={activeCategory === "search"}
         />
 
-        <GameGrid games={GAMES_DATA} />
+        {isLoadingGames ? (
+          <GamesGridLoader />
+        ) : (
+          <GameGrid
+            games={gamesData}
+            onLoadMore={() => fetchNextPage()}
+            hasNextPage={hasNextPage}
+            isLoadingMore={isFetchingNextPage}
+          />
+        )}
       </main>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <GameProvider>
+      <AppContent />
+    </GameProvider>
   );
 }
 

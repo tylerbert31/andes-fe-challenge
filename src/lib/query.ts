@@ -1,6 +1,10 @@
 import axios from "axios";
-import { useQuery, type UseQueryResult } from "@tanstack/react-query";
-import type { ListResponse, Category } from "../types";
+import {
+  useQuery,
+  useInfiniteQuery,
+  type UseQueryResult,
+} from "@tanstack/react-query";
+import type { ListResponse, Category, Game } from "../types";
 
 class query {
   private get = axios.get;
@@ -31,6 +35,31 @@ class query {
         );
         return res.data as Category[];
       },
+    });
+  }
+
+  public getGames({
+    category = "",
+    provider = "",
+  }: {
+    category?: string;
+    provider?: string;
+  }) {
+    return useInfiniteQuery<Game[]>({
+      queryKey: ["games", category, provider],
+      queryFn: async ({ pageParam = 1 }) => {
+        const res = await this.get(
+          `${this.rootUrl}/mexicopwa/data/games_v2.php?category=${category}&provider=${provider}&account=&page=${pageParam}&display_platform=0`,
+        );
+        return res.data as Game[];
+      },
+      getNextPageParam: (lastPage, allPages) => {
+        if (lastPage.length >= 45) {
+          return allPages.length + 1;
+        }
+        return undefined;
+      },
+      initialPageParam: 1,
     });
   }
 }
