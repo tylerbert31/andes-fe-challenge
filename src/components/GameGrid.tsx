@@ -49,12 +49,12 @@ export const GameGrid = ({
           <button
             onClick={onLoadMore}
             disabled={isLoadingMore}
-            className="w-full max-w-sm py-3 rounded-full border-2 border-gray-100 text-gray-400 font-bold hover:border-sky-400 hover:text-sky-500 transition-all duration-300 uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-sky-50 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full cursor-pointer max-w-sm py-3 rounded-full border-2 border-gray-100 text-gray-400 font-bold hover:border-sky-400 hover:text-sky-500 transition-all duration-300 uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-sky-50 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoadingMore ? (
               <span className="flex items-center gap-2">
                 <div className="w-4 h-4 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" />
-                Carregando...
+                Loading...
               </span>
             ) : (
               <>

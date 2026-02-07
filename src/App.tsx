@@ -13,6 +13,8 @@ import Query from "./lib/query";
 
 import { GameProvider, useGame } from "./context/GameContext";
 
+const DEFAULT_CATEGORY = "15665";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { FavoritesPage } from "./FavoritesPage";
 
@@ -30,11 +32,14 @@ function HomePage() {
     hasNextPage,
     isFetchingNextPage,
   } = Query.getGames({
-    category: activeCategory,
+    category: activeCategory === "search" ? DEFAULT_CATEGORY : activeCategory,
     provider,
   });
 
-  const gamesData = gamesInfiniteData?.pages.flat() || [];
+  const allGames = gamesInfiniteData?.pages.flat() || [];
+  const gamesData = allGames.filter((game) =>
+    game.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
   const handleCategoryClick = (id: string) => {
     setActiveCategory(id);

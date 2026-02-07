@@ -50,7 +50,7 @@ export const Categories = ({
             <button
               key={catData.id}
               onClick={() => onCategoryClick(catData.id)}
-              className={`flex flex-col items-center min-w-[60px] gap-1 transition-all ${
+              className={`flex flex-col cursor-pointer items-center min-w-[60px] gap-1 transition-all ${
                 isActive ? "opacity-100" : "opacity-60 hover:opacity-100"
               }`}
             >

@@ -28,7 +28,7 @@ export const Header = () => {
             to="/"
             className="text-2xl font-black text-sky-500 italic tracking-tighter cursor-pointer"
           >
-            FUN88
+            FUN88 Clone
           </Link>
         </div>
 
