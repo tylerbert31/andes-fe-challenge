@@ -43,7 +43,7 @@ export const Categories = ({
 
   return (
     <section className="border-b border-gray-100 pb-2">
-      <div className="flex space-x-4 overflow-x-auto px-4 pb-4 scrollbar-hide">
+      <div className="flex lg:justify-center space-x-4 overflow-x-auto px-4 pb-4 scrollbar-hide">
         {categoriesList.map((catData) => {
           const isActive = activeCategory === catData.id;
           return (

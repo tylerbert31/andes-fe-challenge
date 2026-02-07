@@ -7,6 +7,7 @@ import { GameProviders, GameProvidersLoader } from "./components/GameProviders";
 import { Categories } from "./components/Categories";
 import { SearchBar } from "./components/SearchBar";
 import { GameGrid, GamesGridLoader } from "./components/GameGrid";
+import { Footer } from "./components/Footer";
 
 // Data & Types
 import Query from "./lib/query";
@@ -50,7 +51,7 @@ function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white font-sans text-gray-800 pb-20">
+    <div className="min-h-screen bg-white font-sans text-gray-800 flex flex-col">
       <Header />
 
       <main className="space-y-6 pt-4">
@@ -82,6 +83,7 @@ function HomePage() {
           />
         )}
       </main>
+      <Footer />
     </div>
   );
 }

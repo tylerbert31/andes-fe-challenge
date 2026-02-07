@@ -2,13 +2,14 @@ import { useGame } from "./context/GameContext";
 import { Header } from "./components/Header";
 import { GameGrid } from "./components/GameGrid";
 import { Link } from "react-router-dom";
+import { Footer } from "./components/Footer";
 
 export const FavoritesPage = () => {
   const { favorites } = useGame();
   const gamesArray = Array.from(favorites.values());
 
   return (
-    <div className="min-h-screen bg-white font-sans text-gray-800 pb-20">
+    <div className="min-h-screen bg-white font-sans text-gray-800 flex flex-col">
       <Header />
 
       <main className="space-y-6 pt-4">
@@ -70,6 +71,7 @@ export const FavoritesPage = () => {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 };
