@@ -1,60 +1,67 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import "./App.css";
 
 // Components
 import { Header } from "./components/Header";
-import { GameProviders } from "./components/GameProviders";
+import { GameProviders, GameProvidersLoader } from "./components/GameProviders";
 import { Categories } from "./components/Categories";
 import { SearchBar } from "./components/SearchBar";
-import { GameGrid } from "./components/GameGrid";
+import { GameGrid, GamesGridLoader } from "./components/GameGrid";
+import { Footer } from "./components/Footer";
 
 // Data & Types
-import {
-  CATEGORIES_DATA,
-  PROVIDERS_DATA,
-  GAMES_DATA,
-  CATEGORY_MAP,
-} from "./data/mockData";
+import Query from "./lib/query";
 
-function App() {
-  const [activeCategory, setActiveCategory] = useState("15665");
-  const [searchQuery, setSearchQuery] = useState("");
+import { GameProvider, useGame } from "./context/GameContext";
 
-  const filteredGames = useMemo(() => {
-    let games = GAMES_DATA;
+const DEFAULT_CATEGORY = "15665";
 
-    if (activeCategory === "search") {
-      if (searchQuery.trim() === "") return games;
-      return games.filter((game) =>
-        game.name.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
-    } else {
-      const categoryName = CATEGORY_MAP[activeCategory];
-      if (categoryName) {
-        games = games.filter((game) => game.category.includes(categoryName));
-      }
-    }
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { FavoritesPage } from "./FavoritesPage";
 
-    return games;
-  }, [activeCategory, searchQuery]);
+function HomePage() {
+  const { activeCategory, setActiveCategory, provider, setProvider } =
+    useGame();
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  // Get Categories and Providers
+  const { data: listData, isLoading: isLoadingList } = Query.getList();
+  const {
+    data: gamesInfiniteData,
+    isLoading: isLoadingGames,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = Query.getGames({
+    category: activeCategory === "search" ? DEFAULT_CATEGORY : activeCategory,
+    provider,
+  });
+
+  const allGames = gamesInfiniteData?.pages.flat() || [];
+  const gamesData = allGames.filter((game) =>
+    game.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
   const handleCategoryClick = (id: string) => {
-    if (id === activeCategory && id === "search") return;
     setActiveCategory(id);
+    setProvider(""); // Reset provider when changing category
     if (id !== "search") {
       setSearchQuery("");
     }
   };
 
   return (
-    <div className="min-h-screen bg-white font-sans text-gray-800 pb-20">
+    <div className="min-h-screen bg-white font-sans text-gray-800 flex flex-col">
       <Header />
 
       <main className="space-y-6 pt-4">
-        <GameProviders data={PROVIDERS_DATA} />
+        {isLoadingList ? (
+          <GameProvidersLoader />
+        ) : (
+          <GameProviders data={listData?.providers || {}} />
+        )}
 
         <Categories
-          data={CATEGORIES_DATA}
           activeCategory={activeCategory}
           onCategoryClick={handleCategoryClick}
         />
@@ -65,9 +72,32 @@ function App() {
           visible={activeCategory === "search"}
         />
 
-        <GameGrid games={filteredGames} />
+        {isLoadingGames ? (
+          <GamesGridLoader />
+        ) : (
+          <GameGrid
+            games={gamesData}
+            onLoadMore={() => fetchNextPage()}
+            hasNextPage={hasNextPage}
+            isLoadingMore={isFetchingNextPage}
+          />
+        )}
       </main>
+      <Footer />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <GameProvider>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
+        </Routes>
+      </GameProvider>
+    </BrowserRouter>
   );
 }
 

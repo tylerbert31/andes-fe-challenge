@@ -12,7 +12,7 @@ export const SearchBar = ({ value, onChange, visible }: SearchBarProps) => {
       <div className="relative">
         <input
           type="text"
-          placeholder="Buscar juegos..."
+          placeholder="Search game..."
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className="w-full bg-gray-100 border-none rounded-full py-3 pl-12 pr-4 text-gray-700 font-medium focus:ring-2 focus:ring-sky-500 outline-none"

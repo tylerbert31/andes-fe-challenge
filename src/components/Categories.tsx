@@ -1,26 +1,19 @@
-import { useEffect, useState } from "react";
 import type { Category } from "../types";
 import { SkeletonBox } from "./Loader";
+import Query from "../lib/query";
 
 interface CategoriesProps {
-  data: Category[];
   activeCategory: string;
   onCategoryClick: (id: string) => void;
 }
 
 export const Categories = ({
-  data,
   activeCategory,
   onCategoryClick,
 }: CategoriesProps) => {
-  const [loading, setLoading] = useState(true);
+  const { data: categoriesData, isLoading } = Query.getCategories();
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
+  if (isLoading || !categoriesData) {
     return (
       <div className="flex space-x-4 px-4 py-2 overflow-x-auto scrollbar-hide">
         {[1, 2, 3, 4, 5].map((i) => (
@@ -36,21 +29,33 @@ export const Categories = ({
     );
   }
 
+  // Combine Search + API Categories
+  const categoriesList: Category[] = [
+    {
+      id: "search",
+      category: "SEARCH",
+      providers: {},
+      count: 0,
+      article: null,
+    },
+    ...categoriesData,
+  ];
+
   return (
     <section className="border-b border-gray-100 pb-2">
-      <div className="flex space-x-4 overflow-x-auto px-4 pb-4 scrollbar-hide">
-        {data.map((cat) => {
-          const isActive = activeCategory === cat.id;
+      <div className="flex lg:justify-center space-x-4 overflow-x-auto px-4 pb-4 scrollbar-hide">
+        {categoriesList.map((catData) => {
+          const isActive = activeCategory === catData.id;
           return (
             <button
-              key={cat.id}
-              onClick={() => onCategoryClick(cat.id)}
-              className={`flex flex-col items-center min-w-[60px] gap-1 transition-all ${
+              key={catData.id}
+              onClick={() => onCategoryClick(catData.id)}
+              className={`flex flex-col cursor-pointer items-center min-w-[60px] gap-1 transition-all ${
                 isActive ? "opacity-100" : "opacity-60 hover:opacity-100"
               }`}
             >
               <div className="relative h-12 w-12 flex items-center justify-center">
-                {cat.id === "search" ? (
+                {catData.id === "search" ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -68,11 +73,11 @@ export const Categories = ({
                 ) : (
                   <img
                     src={
-                      isActive && cat.icon_active
-                        ? cat.icon_active
-                        : cat.icon_off || cat.icon_light
+                      isActive && catData.icon_active
+                        ? catData.icon_active
+                        : catData.icon_off || catData.icon_light
                     }
-                    alt={cat.category}
+                    alt={catData.category}
                     className="w-full h-full object-contain filter drop-shadow-sm transition-transform duration-200"
                     onError={(e) => {
                       (e.target as HTMLImageElement).style.display = "none";
@@ -91,16 +96,16 @@ export const Categories = ({
                   <span
                     className={`text-base font-bold ${isActive ? "text-sky-500" : "text-gray-400"}`}
                   >
-                    {cat.category.substring(0, 1)}
+                    {catData.category.substring(0, 1)}
                   </span>
                 </div>
 
-                {cat.count > 0 && cat.id === "15665" && (
+                {catData.count > 0 && catData.id === "15665" && (
                   <span className="absolute -top-1 -right-2 bg-sky-400 text-white text-[10px] font-bold px-1.5 rounded-full shadow-sm">
-                    {cat.count}
+                    {catData.count}
                   </span>
                 )}
-                {cat.category === "JACKPOT" && (
+                {catData.category === "JACKPOT" && (
                   <span className="absolute -top-2 -right-2 text-red-500 text-sm animate-bounce">
                     🔥
                   </span>
@@ -114,7 +119,7 @@ export const Categories = ({
                     : "text-gray-400"
                 }`}
               >
-                {cat.category}
+                {catData.category}
               </span>
             </button>
           );

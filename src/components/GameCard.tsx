@@ -1,6 +1,10 @@
+import { useGame } from "../context/GameContext";
 import type { Game } from "../types";
 
 export const GameCard = ({ game }: { game: Game }) => {
+  const { isFavorite, toggleFavorite } = useGame();
+  const active = isFavorite(game.id);
+
   return (
     <div className="relative group cursor-pointer">
       <div className="relative aspect-square rounded-xl overflow-hidden shadow-sm bg-gray-200">
@@ -23,14 +27,20 @@ export const GameCard = ({ game }: { game: Game }) => {
           </div>
         )}
 
-        <div className="absolute top-1 right-1 opacity-80 hover:opacity-100 p-1">
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleFavorite(game);
+          }}
+          className="absolute top-1 right-1 p-1 z-10 hover:scale-120 transition-transform"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            fill="none"
+            fill={active ? "#fbbf24" : "none"}
             viewBox="0 0 24 24"
             strokeWidth={1.5}
-            stroke="white"
-            className="w-4 h-4 drop-shadow-md"
+            stroke={active ? "#fbbf24" : "white"}
+            className="w-5 h-5 drop-shadow-md"
           >
             <path
               strokeLinecap="round"
