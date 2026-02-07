@@ -13,7 +13,6 @@ import "swiper/css/free-mode";
 import "swiper/css/navigation";
 
 import { useGame } from "../context/GameContext";
-// 7df5e3b51ccbe0bd0cd0175363bd0bfb
 
 interface GameProvidersProps {
   data: ListResponse["providers"];

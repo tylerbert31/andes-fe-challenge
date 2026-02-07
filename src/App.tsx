@@ -13,7 +13,10 @@ import Query from "./lib/query";
 
 import { GameProvider, useGame } from "./context/GameContext";
 
-function AppContent() {
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { FavoritesPage } from "./FavoritesPage";
+
+function HomePage() {
   const { activeCategory, setActiveCategory, provider, setProvider } =
     useGame();
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -80,9 +83,14 @@ function AppContent() {
 
 function App() {
   return (
-    <GameProvider>
-      <AppContent />
-    </GameProvider>
+    <BrowserRouter>
+      <GameProvider>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
+        </Routes>
+      </GameProvider>
+    </BrowserRouter>
   );
 }
 
